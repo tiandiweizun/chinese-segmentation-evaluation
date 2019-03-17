@@ -1,0 +1,8 @@
+jieba
+jieba_fast
+pkuseg
+pynlpir
+thulac
+snownlp
+requests
+pyltp
