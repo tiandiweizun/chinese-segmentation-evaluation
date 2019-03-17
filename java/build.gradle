@@ -1,0 +1,68 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: "com.github.johnrengelman.shadow"
+
+group 'indi.nlp'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+//禁掉jar task
+jar.enabled = false
+shadowJar {
+    baseName = "nlp-evaluation-java"
+    //classifier是生成jar包的后缀
+    classifier = null
+    version = '1.0.0'
+    manifest {
+        attributes 'Main-Class': 'indi.tiandi.nlp.evaluation.SegEvaluation'
+    }
+
+    dependencies {
+        // 排除掉stanford代码(stanford又大速度又慢)
+        exclude(dependency('edu.stanford.nlp:stanford-corenlp'))
+    }
+
+    from("../") {
+        include 'data/seg.data_big'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.2:models-chinese'
+    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.2'
+    implementation 'org.ansj:ansj_seg:5.1.6'
+    implementation 'com.hankcs:hanlp:portable-1.6.8'
+    implementation 'org.apdplat:word:1.3.1'
+    implementation 'io.github.yizhiru:thulac4j:3.1.2'
+    implementation 'com.chenlb.mmseg4j:mmseg4j-core:1.10.0'
+    implementation 'org.lionsoul:jcseg-core:2.4.0'
+    implementation 'com.huaban:jieba-analysis:1.0.2'
+
+    testImplementation 'junit:junit:4.2'
+}
+
+
+artifacts {
+    shadowJar;
+}
+
+build.dependsOn(shadowJar);

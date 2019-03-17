@@ -1,0 +1,6 @@
+jieba
+pkuseg
+pynlpir
+thulac
+snownlp
+requests
