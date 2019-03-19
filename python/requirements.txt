@@ -4,3 +4,4 @@ pynlpir
 thulac
 snownlp
 requests
+pyltp
