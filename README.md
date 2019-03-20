@@ -35,7 +35,7 @@
  | --| -- | ------ | --- | --- | --- |
  |[HanLP](https://github.com/hankcs/HanLP)          |  0.900433  |  0.910614   |  0.905495  | 1034.470451  | 797.596346 |
  |[jieba](https://github.com/huaban/jieba-analysis) |  0.852657  |  0.803263   |  0.827223  | 1774.181830  | 980.865943 |
- |[thulac](https://github.com/yizhiru/thulac4j)     |  0.848839  |  0.901930   |  0.893082  | 1449.749131  | 939.832732 |
+ |[thulac](https://github.com/yizhiru/thulac4j)     |  0.884405  |  0.901930   |  0.893082  | 1449.749131  | 939.832732 |
  
 经过多次测试发现，thulac在linux上速度不是特别稳定，最快与jiba差不多
 
