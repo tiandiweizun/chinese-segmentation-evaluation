@@ -1,5 +1,6 @@
 import argparse
 import jieba
+import jieba_fast
 import os
 import pkuseg
 import pynlpir
@@ -53,7 +54,12 @@ class jieba_impl(Seg):
     def segment(self, sentence):
         return jieba.lcut(sentence)
 
+#jieba_fast分词
+class jieba_fast_impl(Seg):
+    def segment(self, sentence):
+        return jieba_fast.lcut(sentence)
 
+#snownlp分词
 class snownlp_impl(Seg):
     def segment(self, sentence):
         return SnowNLP(sentence).words
@@ -268,6 +274,6 @@ if __name__ == '__main__':
                         default="")
     parser.add_argument('-o', help='path to save the result, default is not saving', default="")
     parser.add_argument("-n", help='maximum number of read rows, default reading all', default="-1")
-    parser.add_argument("-c", help='segmentor to evaluate', default="pkuseg,jieba,thulac")
+    parser.add_argument("-c", help='segmentor to evaluate', default="pkuseg,jieba_fast,thulac")
     args = parser.parse_args()
     evaluate(args.i, args.o, args.n, args.c)

@@ -65,7 +65,7 @@
 </br>       -i 分词文件，默认为data/seg.data_big文件,每行一个句子，每个词用空格分开，可以指定自己的测试集
 </br>       -o 分词结果存储路径，默认不存储
 </br>       -n 最大读取分词文件行数，由于python速度太慢，建议设置
-</br>       -c 需要评估的分词器名称，用英文逗号隔开，默认pkuseg，jieba，thulac
+</br>       -c 需要评估的分词器名称，用英文逗号隔开，默认pkuseg，jieba_fast，thulac
 
 2. [pynlpir](https://github.com/tsroten/pynlpir)存在bug(把词语拼接起来和原始句子不一样)，[pyltp](https://github.com/HIT-SCIR/pyltp)在windows上不易安装，这里都没有进行测试
 
@@ -75,10 +75,11 @@
 
 |segmentor|precision| recall | f1  |  speed(字符/ms)_windows   | speed(字符/ms)_linux   |
 | --| -- | ------ | --- | --- |--- |
-|[pkuseg](https://github.com/lancopku/pkuseg-python) |  0.890170  |  0.886405  | 0.888284  |  34.077104 |  19.826954  |
-|[jieba](https://github.com/fxsjy/jieba)             |  0.855293  |  0.808204  | 0.831082  | 169.651694 | 104.554222  |
-|[thulac](https://github.com/thunlp/THULAC-Python)   |  0.848839  |  0.883031  | 0.865597  |  28.831738 |  16.565779  |
-|[pyltp](https://github.com/HIT-SCIR/pyltp)          |  0.894885  |  0.908761  | 0.901770  |  --------- |  52.371131  |
+|[pkuseg](https://github.com/lancopku/pkuseg-python)    |  0.890170  |  0.886405  | 0.888284  |  34.077104 |  19.826954  |
+|[jieba](https://github.com/fxsjy/jieba)                |  0.855293  |  0.808204  | 0.831082  | 169.651694 | 104.554222  |
+|[jieba_fast](https://github.com/deepcs233/jieba_fast) |  0.855299  |  0.808182  | 0.831073  | 408.241520 | 203.815985  |
+|[thulac](https://github.com/thunlp/THULAC-Python)      |  0.848839  |  0.883031  | 0.865597  |  28.831738 |  16.565779  |
+|[pyltp](https://github.com/HIT-SCIR/pyltp)             |  0.894885  |  0.908761  | 0.901770  |  --------- |  52.371131  |
 
 #### 开发者
 

@@ -1,4 +1,5 @@
 jieba
+jieba_fast
 pkuseg
 pynlpir
 thulac
