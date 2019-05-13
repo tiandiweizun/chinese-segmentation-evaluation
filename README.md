@@ -19,7 +19,7 @@
 </br> -i 分词文件，默认为data/seg.data_big文件,每行一个句子，每个词用空格分开，可以指定自己的测试集
 </br> -o 分词结果存储路径，默认不存储
 </br> -n 最大读取分词文件行数
-</br> -c 需要评估的分词器名称，用英文逗号隔开，默认HanLP，jieba，thulac
+</br> -c 需要评估的分词器名称，用英文逗号隔开，默认HanLP，jieba，thulac，示例: -c=HanLP
 
 2. 由于[斯坦福分词](https://github.com/stanfordnlp/CoreNLP)效果一般，速度极慢，且模型巨大，在打包的时候已经排除（不影响在IDE里面测试），
       打包如果要包含斯坦福分词，修改build.gradle，注释掉exclude(dependency('edu.stanford.nlp:stanford-corenlp'))
