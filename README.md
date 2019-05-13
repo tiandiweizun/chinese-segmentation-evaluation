@@ -67,7 +67,7 @@
 </br>       -n 最大读取分词文件行数，由于python速度太慢，建议设置
 </br>       -c 需要评估的分词器名称，用英文逗号隔开，默认pkuseg，jieba_fast，thulac
 
-2. [pynlpir](https://github.com/tsroten/pynlpir)存在bug(把词语拼接起来和原始句子不一样)，[pyltp](https://github.com/HIT-SCIR/pyltp)在windows上不易安装，这里都没有进行测试
+2. [pynlpir](https://github.com/tsroten/pynlpir)存在bug(把词语拼接起来和原始句子不一样)，[pyltp](https://github.com/HIT-SCIR/pyltp)在windows上不易安装，这里都没有进行测试，比较慢的也没有测试
 
 ##### 测试效果 
 
@@ -80,6 +80,7 @@
 |[jieba_fast](https://github.com/deepcs233/jieba_fast) |  0.855299  |  0.808182  | 0.831073  | 408.241520 | 203.815985  |
 |[thulac](https://github.com/thunlp/THULAC-Python)      |  0.848839  |  0.883031  | 0.865597  |  28.831738 |  16.565779  |
 |[pyltp](https://github.com/HIT-SCIR/pyltp)             |  0.894885  |  0.908761  | 0.901770  |  --------- |  52.371131  |
+|[snownlp](https://github.com/isnowfy/snownlp)          |  0.811029  |  0.864835  | 0.837069  |  --------- |   1.947430  |
 
 #### 开发者
 
