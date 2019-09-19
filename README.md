@@ -19,7 +19,7 @@
 </br> -i 分词文件，默认为data/seg.data_big文件,每行一个句子，每个词用空格分开，可以指定自己的测试集
 </br> -o 分词结果存储路径，默认不存储
 </br> -n 最大读取分词文件行数
-</br> -c 需要评估的分词器名称，用英文逗号隔开，默认HanLP，jieba，thulac，示例: -c=HanLP
+</br> -c 需要评估的分词器名称，用英文逗号隔开，默认HanLP，jieba，thulac，mynlp，示例: -c=HanLP
 
 2. 由于[斯坦福分词](https://github.com/stanfordnlp/CoreNLP)效果一般，速度极慢，且模型巨大，在打包的时候已经排除（不影响在IDE里面测试），
       打包如果要包含斯坦福分词，修改build.gradle，注释掉exclude(dependency('edu.stanford.nlp:stanford-corenlp'))
@@ -36,8 +36,9 @@
  |[HanLP](https://github.com/hankcs/HanLP)          |  0.900433  |  0.910614   |  0.905495  | 1034.470451  | 797.596346 |
  |[jieba](https://github.com/huaban/jieba-analysis) |  0.852657  |  0.803263   |  0.827223  | 1774.181830  | 980.865943 |
  |[thulac](https://github.com/yizhiru/thulac4j)     |  0.884405  |  0.901930   |  0.893082  | 1449.749131  | 939.832732 |
+ |[mynlp](https://github.com/mayabot/mynlp)         |  0.901661  |  0.900246   |  0.900953  | 1739.272404  | 1178.930115|
  
-经过多次测试发现，thulac在linux上速度不是特别稳定，最快与jiba差不多
+经过多次测试发现，linux第一个性能偏低，thulac在linux上速度不是特别稳定，最快与jiba差不多
 
 #### 开发者
 

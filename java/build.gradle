@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.chenlb.mmseg4j:mmseg4j-core:1.10.0'
     implementation 'org.lionsoul:jcseg-core:2.4.0'
     implementation 'com.huaban:jieba-analysis:1.0.2'
+    implementation 'com.mayabot.mynlp:mynlp-segment:3.0.1'
 
     testImplementation 'junit:junit:4.2'
 }

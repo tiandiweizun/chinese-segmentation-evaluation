@@ -61,7 +61,8 @@ public class SegEvaluation {
             }
             // 从jar包内部加载
             inputStream = SegEvaluation.class.getClassLoader().getResourceAsStream((rFileName));
-        } else {
+        }
+        else {
             inputStream = new FileInputStream(rFileName);
             System.out.println("读入分词文件地址:" + file.getAbsolutePath());
         }
@@ -191,7 +192,8 @@ public class SegEvaluation {
                 System.out.println(String.format("precision:%f \t recall:%f \t f1:%f", precision, recall, f));
                 System.out.println(String.format("耗时:%d ms,\t速度:%f 字符/毫秒", item.time, charCount * 1.0 / item.time));
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println(line);
             e.printStackTrace();
         }
@@ -218,11 +220,13 @@ public class SegEvaluation {
                 result = update(predict_offset, predict_term_index, predict);
                 predict_offset = result[0];
                 predict_term_index = result[1];
-            } else if (gold_offset < predict_offset) {
+            }
+            else if (gold_offset < predict_offset) {
                 int[] result = update(gold_offset, gold_term_index, gold);
                 gold_offset = result[0];
                 gold_term_index = result[1];
-            } else {
+            }
+            else {
                 int[] result = update(predict_offset, predict_term_index, predict);
                 predict_offset = result[0];
                 predict_term_index = result[1];
@@ -277,20 +281,25 @@ public class SegEvaluation {
                             config.segmentorNames = Arrays.asList(segmentorNames);
                             break;
                     }
-                } else if (containsOption) {
+                }
+                else if (containsOption) {
                     System.out.println("optional argument follows keyword argument");
-                } else {
+                }
+                else {
                     if (i == 0) {
                         config.rFileName = args[0].trim();
-                    } else if (i == 1) {
+                    }
+                    else if (i == 1) {
                         config.wFilePath = args[1].trim();
-                    } else if (i == 2) {
+                    }
+                    else if (i == 2) {
                         config.maxLineCount = Integer.parseInt(args[2].trim());
                     }
                 }
             }
             return config;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println("参数错误：" + e.getMessage());
             System.out.println(helpMessage);
             System.exit(0);
@@ -328,13 +337,14 @@ public class SegEvaluation {
                     String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
                     //以文件的方式扫描整个包下的文件 并添加到集合中
                     findAndAddClassesInPackageByFile(packageName, filePath, recursive, classes);
-                } else if ("jar".equals(protocol)) {
+                }
+                else if ("jar".equals(protocol)) {
                     //如果是jar包文件
                     //定义一个JarFile
                     JarFile jar;
                     try {
                         //获取jar
-                        jar = ((JarURLConnection) url.openConnection()).getJarFile();
+                        jar = ((JarURLConnection)url.openConnection()).getJarFile();
                         //从此jar包 得到一个枚举类
                         Enumeration<JarEntry> entries = jar.entries();
                         //同样的进行循环迭代
@@ -367,12 +377,14 @@ public class SegEvaluation {
                                 }
                             }
                         }
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return classes;
@@ -387,7 +399,8 @@ public class SegEvaluation {
      * @param classes
      */
 
-    public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive, List<String> classes) {
+    public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive,
+                                                        List<String> classes) {
         //获取此包的目录 建立一个File
         File dir = new File(packagePath);
         //如果不存在或者 也不是目录就直接返回
@@ -405,16 +418,14 @@ public class SegEvaluation {
         for (File file : dirfiles) {
             //如果是目录 则继续扫描
             if (file.isDirectory()) {
-                findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(),
-                        recursive,
-                        classes);
-            } else {
+                findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
+            }
+            else {
                 //如果是java类文件 去掉后面的.class 只留下类名
                 String className = file.getName().substring(0, file.getName().length() - 6);
                 classes.add(packageName + '.' + className);
             }
         }
-
     }
 }
 
@@ -443,13 +454,16 @@ class Evaluator {
             long cost = end - start;
             if (!sb.toString().equals(SegEvaluation.testSentence)) {
                 System.out.println(name + " 初始化错误,句子:" + SegEvaluation.testSentence + ",分词结果:" + terms);
-            } else {
+            }
+            else {
                 this.init = true;
                 System.out.println(name + " 初始化结束,耗时:" + cost + " ms");
             }
-        } catch (InstantiationException e) {
+        }
+        catch (InstantiationException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -460,5 +474,5 @@ class Config {
     public String wFilePath = "";
     public boolean writeResult = false;
     public int maxLineCount = -1;
-    public List<String> segmentorNames = new ArrayList<>(Arrays.asList("HanLP", "Jieba", "Thulac"));
+    public List<String> segmentorNames = new ArrayList<>(Arrays.asList("HanLP", "Jieba", "Thulac", "mynlp"));
 }
