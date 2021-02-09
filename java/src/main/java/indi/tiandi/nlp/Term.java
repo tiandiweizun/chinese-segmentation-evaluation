@@ -1,7 +1,19 @@
 package indi.tiandi.nlp;
 
+/**
+ * 词和词性
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class Term {
+    /**
+     * 词
+     */
     private String word;
+    /**
+     * 词性
+     */
     private String pos;
 
     public Term(String word) {

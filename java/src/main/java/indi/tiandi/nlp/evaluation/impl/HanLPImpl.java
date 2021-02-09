@@ -6,7 +6,12 @@ import indi.tiandi.nlp.Term;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * HanLP分词
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class HanLPImpl extends Seg {
 
     @Override

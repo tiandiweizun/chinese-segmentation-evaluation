@@ -9,7 +9,12 @@ import indi.tiandi.nlp.Term;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * MYNLP分词
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class MYNLPImpl extends Seg {
     Lexer lexer = Lexers.builder().basic().core().keepOriCharOutput().build();
 

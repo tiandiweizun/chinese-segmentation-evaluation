@@ -3,8 +3,7 @@ package indi.tiandi.nlp;
 import java.util.List;
 
 /**
- * Sentence
- * Sentence
+ * 句子
  *
  * @author tiandi
  * @date 2019/3/4
