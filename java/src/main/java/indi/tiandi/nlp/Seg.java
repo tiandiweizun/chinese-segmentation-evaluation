@@ -1,7 +1,12 @@
 package indi.tiandi.nlp;
 
 import java.util.List;
-
+/**
+ * 分词器抽象类
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public abstract class Seg {
     private String name;
 

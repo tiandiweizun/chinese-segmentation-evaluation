@@ -1,11 +1,16 @@
 import argparse
+import os
+import sys
+import time
+import zipfile
+
 import jieba
 import jieba_fast
-import os
 import pkuseg
 import pynlpir
+import requests
 import thulac
-import time
+import wget
 from snownlp import SnowNLP
 
 
@@ -26,14 +31,12 @@ class pynlpir_impl:
 
     @staticmethod
     def update_pynlpir_lience():
-        import requests
         # pynlpir 分词授权下载地址
         # https://github.com/NLPIR-team/NLPIR/tree/master/License
         url = 'https://raw.githubusercontent.com/NLPIR-team/NLPIR/master/License/license%20for%20a%20month/NLPIR-ICTCLAS%E5%88%86%E8%AF%8D%E7%B3%BB%E7%BB%9F%E6%8E%88%E6%9D%83/NLPIR.user'
         r = requests.get(url)
         # 拷贝到pynlpir相应的目录
-        pynlpir_path = "D:/Anaconda3/Lib/site-packages/pynlpir/Data"
-        with open(os.path.join(pynlpir_path, "NLPIR.user"), "wb") as code:
+        with open(os.path.join(pynlpir.__path__[0], "Data", "NLPIR.user"), "wb") as code:
             code.write(r.content)
 
     def segment(self, sentence):
@@ -54,12 +57,14 @@ class jieba_impl(Seg):
     def segment(self, sentence):
         return jieba.lcut(sentence)
 
-#jieba_fast分词
+
+# jieba_fast分词
 class jieba_fast_impl(Seg):
     def segment(self, sentence):
         return jieba_fast.lcut(sentence)
 
-#snownlp分词
+
+# snownlp分词
 class snownlp_impl(Seg):
     def segment(self, sentence):
         return SnowNLP(sentence).words
@@ -136,8 +141,34 @@ def evaluate(input, output, max_line_count, include):
     # 分词文件目录
     if len(input) == 0:
         # 项目root目录
-        root = os.getcwd()[:os.getcwd().index("python")]
-        input = os.path.join(root, "data/seg.data_big")
+        root = os.getcwd()[:os.getcwd().rindex("python")]
+        data_dir = os.path.join(root, "data")
+        input = os.path.join(data_dir, "seg_data_big.txt")
+        download_seg_file = True
+        if not os.path.exists(input):
+            temp_zip_file = os.path.join(data_dir, "seg_data_big.zip")
+            if os.path.exists(temp_zip_file):
+                try:
+                    zipfile.ZipFile(temp_zip_file).extractall(data_dir)
+                    download_seg_file = False
+                except Exception as e:
+                    os.remove(temp_zip_file)
+            if download_seg_file:
+                url = "https://github.com/tiandiweizun/chinese-segmentation-evaluation/releases/download/v1.0.1/seg_data_big.zip"
+                print("从 %s 下载文件，如果下载较慢，亦可手动下载，保存到 %s 即可" % (url, temp_zip_file))
+                try:
+                    if not os.path.exists(os.path.dirname(temp_zip_file)):
+                        os.makedirs(os.path.dirname(temp_zip_file))
+                    wget.download(url, out=temp_zip_file)
+                    print("下载完成")
+                    zipfile.ZipFile(temp_zip_file).extractall(data_dir)
+                except Exception as e:
+                    print("下载或解压错误：%s" % e)
+                    sys.exit(1)
+
+    if not os.path.exists(input):
+        print("未从本地到文件：%s" % input)
+        sys.exit(1)
     print("读入分词文件地址:" + input)
     write_result = False
     if len(output) > 0:
@@ -270,7 +301,8 @@ def calc_score(gold, predict):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='中文分词对比测试')
-    parser.add_argument('-i', help='file to segment, default using the file in nlp-evaluation/data/seg.data_big',
+    parser.add_argument('-i',
+                        help='file to segment, default using the file in chinese-segmentation-evaluation/data/seg_data_big.txt',
                         default="")
     parser.add_argument('-o', help='path to save the result, default is not saving', default="")
     parser.add_argument("-n", help='maximum number of read rows, default reading all', default="-1")

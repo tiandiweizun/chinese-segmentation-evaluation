@@ -9,7 +9,12 @@ import org.apdplat.word.segmentation.Word;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * word分词
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class WordImpl extends Seg {
     public static final Segmentation segmentation = SegmentationFactory.getSegmentation(SegmentationAlgorithm.MaxNgramScore);
 
