@@ -1,5 +1,5 @@
 package indi.tiandi.nlp.evaluation.impl;
-//
+
 //import indi.nlp.Seg;
 //import indi.nlp.Term;
 //import org.apache.lucene.analysis.TokenStream;
@@ -8,6 +8,12 @@ package indi.tiandi.nlp.evaluation.impl;
 //import java.util.ArrayList;
 //import java.util.List;
 //
+///**
+// * 庖丁分词
+// *
+// * @author tiandi
+// * @date 2019/3/4
+// */
 //public class PaodingImpl implements Seg {
 //    public static PaodingAnalyzer paodingAnalyzer = new PaodingAnalyzer();
 //
@@ -24,6 +30,6 @@ package indi.tiandi.nlp.evaluation.impl;
 //    }
 //
 //    public static void main(String[] args) {
-//new PaodingImpl().segment("我是中国人");
+//        new PaodingImpl().segment("我是中国人");
 //    }
 //}

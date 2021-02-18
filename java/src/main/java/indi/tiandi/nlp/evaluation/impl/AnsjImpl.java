@@ -10,7 +10,12 @@ import org.ansj.util.MyStaticValue;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Ansj分词
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class AnsjImpl extends Seg {
     static {
 //         设置后速度会慢25% 左右

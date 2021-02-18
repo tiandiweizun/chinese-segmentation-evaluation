@@ -1,9 +1,9 @@
-
-
 package indi.tiandi.nlp.evaluation;
 
 import indi.tiandi.nlp.Seg;
 import indi.tiandi.nlp.Term;
+import indi.tiandi.nlp.tool.HttpRequest;
+import indi.tiandi.nlp.tool.ZipUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -19,7 +19,7 @@ import java.util.jar.JarFile;
 
 /**
  * SegEvaluation
- * SegEvaluation
+ * 分词评估器
  *
  * @author tiandi
  * @date 2019/3/4
@@ -32,8 +32,8 @@ public class SegEvaluation {
     static {
         StringBuilder sb = new StringBuilder();
         sb.append("thank you for using nlp-evaluation\n");
-        sb.append("github: https://github.com/tiandiweizun/nlp-evaluation\n");
-        sb.append("\t-i or -input\t\t\tfile to segment, default using the file in nlp-evaluation/data/seg.data_big.\n");
+        sb.append("github: https://github.com/tiandiweizun/chinese-segmentation-evaluation\n");
+        sb.append("\t-i or -input\t\t\tfile to segment,jar default using the file in ./data/seg_data_big.txt and debug model using chinese-segmentation-evaluation/data/seg_data_big.txt\n");
         sb.append("\t-o or -output\t\t\tpath to save the result, default is not saving\n");
         sb.append("\t-n or -max_line_number\t\tmaximum number of read rows, default reading all\n");
         sb.append("\t-c or -contains\t\t\t segmentor to evaluate，default contains HanLP，jieba，thulac\n");
@@ -42,6 +42,15 @@ public class SegEvaluation {
         sb.append("\te.g., java -jar nlp-evaluation-java-1.0.0.jar -n=10\n");
         sb.append("\te.g., java -jar nlp-evaluation-java-1.0.0.jar nlp-evaluation/data/seg.data_big -n=10\n");
         helpMessage = sb.toString();
+    }
+
+    public static String getFileNameWithExtension(File file) {
+        String fileName = file.getName();
+        int i = fileName.lastIndexOf(".");
+        if (i <= 0) {
+            i = fileName.length();
+        }
+        return fileName.substring(0, i);
     }
 
     public static void main(String[] args) throws Exception {
@@ -56,13 +65,45 @@ public class SegEvaluation {
         File file = new File(rFileName);
         if (!file.exists()) {
             URL resource = SegEvaluation.class.getClassLoader().getResource(rFileName);
-            if (resource == null) {
-                System.out.println("未找到文件:" + rFileName);
+            if (resource != null) {
+                // 从jar包内部加载
+                inputStream = SegEvaluation.class.getClassLoader().getResourceAsStream((rFileName));
+            } else {
+                File tempZipFile = new File(Config.zipFileName);
+                if (getFileNameWithExtension(file).equals(getFileNameWithExtension(tempZipFile))) {
+                    boolean download = true;
+                    if (tempZipFile.exists()) {
+                        try {
+                            //解压
+                            ZipUtil.unZip(tempZipFile, tempZipFile.getParent());
+                            download = false;
+                        } catch (Exception e) {
+                            //删除错误zip文件
+                            tempZipFile.delete();
+                        }
+                    }
+                    // 从互联网下载并解压
+                    if (download) {
+                        System.out.println(String.format("从 %s 下载文件，如果下载较慢，亦可手动下载，保存到 %s 即可", Config.url, tempZipFile.getAbsolutePath()));
+                        try {
+                            // 下载
+                            HttpRequest.download(Config.url, Config.zipFileName);
+                            System.out.println("下载完成");
+                            // 解压
+                            ZipUtil.unZip(tempZipFile, tempZipFile.getParent());
+                        } catch (IOException e) {
+                            System.out.println(String.format("下载或解压错误：%s", e.getMessage()));
+                            System.exit(1);
+                        }
+                    }
+                } else {
+                    // 自定义的文件未找到
+                    System.out.println("未从本地和jar包内找到文件:" + rFileName);
+                    System.exit(1);
+                }
             }
-            // 从jar包内部加载
-            inputStream = SegEvaluation.class.getClassLoader().getResourceAsStream((rFileName));
         }
-        else {
+        if (file.exists()) {
             inputStream = new FileInputStream(rFileName);
             System.out.println("读入分词文件地址:" + file.getAbsolutePath());
         }
@@ -192,8 +233,7 @@ public class SegEvaluation {
                 System.out.println(String.format("precision:%f \t recall:%f \t f1:%f", precision, recall, f));
                 System.out.println(String.format("耗时:%d ms,\t速度:%f 字符/毫秒", item.time, charCount * 1.0 / item.time));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(line);
             e.printStackTrace();
         }
@@ -220,13 +260,11 @@ public class SegEvaluation {
                 result = update(predict_offset, predict_term_index, predict);
                 predict_offset = result[0];
                 predict_term_index = result[1];
-            }
-            else if (gold_offset < predict_offset) {
+            } else if (gold_offset < predict_offset) {
                 int[] result = update(gold_offset, gold_term_index, gold);
                 gold_offset = result[0];
                 gold_term_index = result[1];
-            }
-            else {
+            } else {
                 int[] result = update(predict_offset, predict_term_index, predict);
                 predict_offset = result[0];
                 predict_term_index = result[1];
@@ -281,25 +319,20 @@ public class SegEvaluation {
                             config.segmentorNames = Arrays.asList(segmentorNames);
                             break;
                     }
-                }
-                else if (containsOption) {
+                } else if (containsOption) {
                     System.out.println("optional argument follows keyword argument");
-                }
-                else {
+                } else {
                     if (i == 0) {
                         config.rFileName = args[0].trim();
-                    }
-                    else if (i == 1) {
+                    } else if (i == 1) {
                         config.wFilePath = args[1].trim();
-                    }
-                    else if (i == 2) {
+                    } else if (i == 2) {
                         config.maxLineCount = Integer.parseInt(args[2].trim());
                     }
                 }
             }
             return config;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("参数错误：" + e.getMessage());
             System.out.println(helpMessage);
             System.exit(0);
@@ -337,14 +370,13 @@ public class SegEvaluation {
                     String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
                     //以文件的方式扫描整个包下的文件 并添加到集合中
                     findAndAddClassesInPackageByFile(packageName, filePath, recursive, classes);
-                }
-                else if ("jar".equals(protocol)) {
+                } else if ("jar".equals(protocol)) {
                     //如果是jar包文件
                     //定义一个JarFile
                     JarFile jar;
                     try {
                         //获取jar
-                        jar = ((JarURLConnection)url.openConnection()).getJarFile();
+                        jar = ((JarURLConnection) url.openConnection()).getJarFile();
                         //从此jar包 得到一个枚举类
                         Enumeration<JarEntry> entries = jar.entries();
                         //同样的进行循环迭代
@@ -377,14 +409,12 @@ public class SegEvaluation {
                                 }
                             }
                         }
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return classes;
@@ -419,8 +449,7 @@ public class SegEvaluation {
             //如果是目录 则继续扫描
             if (file.isDirectory()) {
                 findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
-            }
-            else {
+            } else {
                 //如果是java类文件 去掉后面的.class 只留下类名
                 String className = file.getName().substring(0, file.getName().length() - 6);
                 classes.add(packageName + '.' + className);
@@ -454,23 +483,22 @@ class Evaluator {
             long cost = end - start;
             if (!sb.toString().equals(SegEvaluation.testSentence)) {
                 System.out.println(name + " 初始化错误,句子:" + SegEvaluation.testSentence + ",分词结果:" + terms);
-            }
-            else {
+            } else {
                 this.init = true;
                 System.out.println(name + " 初始化结束,耗时:" + cost + " ms");
             }
-        }
-        catch (InstantiationException e) {
+        } catch (InstantiationException e) {
             e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 }
 
 class Config {
-    public String rFileName = "data/seg.data_big";
+    public static final String zipFileName = "data/seg_data_big.zip";
+    public static final String url = "https://github.com/tiandiweizun/chinese-segmentation-evaluation/releases/download/v1.0.1/seg_data_big.zip";
+    public String rFileName = "data/seg_data_big.txt";
     public String wFilePath = "";
     public boolean writeResult = false;
     public int maxLineCount = -1;

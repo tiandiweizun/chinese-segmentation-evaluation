@@ -11,7 +11,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * MMSeg分词
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class MMSeg4jImpl extends Seg {
     private static final Dictionary dic = Dictionary.getInstance();
     private static final ComplexSeg seg = new ComplexSeg(dic);

@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Jcseg分词
+ *
+ * @date 2019/3/4
+ * @author tiandi
+ */
 public class JcsegImpl extends Seg {
 
     private final static JcsegTaskConfig config = new JcsegTaskConfig(true);

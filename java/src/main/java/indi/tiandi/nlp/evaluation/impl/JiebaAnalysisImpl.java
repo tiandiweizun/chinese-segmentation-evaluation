@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JiebaAnalysisImpl
- * JiebaAnalysisImpl
+ * 结巴分词
  *
  * @author tiandi
  * @date 2019/3/7
