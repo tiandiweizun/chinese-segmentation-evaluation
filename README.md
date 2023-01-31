@@ -38,7 +38,7 @@
  |[thulac](https://github.com/yizhiru/thulac4j)     |  0.884405  |  0.901930   |  0.893082  | 1449.749131  | 939.832732 |
  |[mynlp](https://github.com/mayabot/mynlp)         |  0.901661  |  0.900246   |  0.900953  | 1739.272404  | 1178.930115|
  
-经过多次测试发现，linux第一个性能偏低，thulac在linux上速度不是特别稳定，最快与jiba差不多
+经过多次测试发现，linux第一个性能偏低，thulac在linux上速度不是特别稳定，最快与jieba差不多
 
 #### 开发者
 
